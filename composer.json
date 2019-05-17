@@ -4,7 +4,8 @@
     "type": "composer",
     "autoload": {
         "psr-4": {
-            "Game\\": "src/Game"
+            "Game\\": "src/Game",
+            "Game\\Bee\\": "src/Game/Game"
         }
     },
     "license": "MIT",
@@ -14,5 +15,8 @@
             "email": "ben.parish@onshop.co.uk"
         }
     ],
-    "minimum-stability": "dev"
+    "minimum-stability": "dev",
+    "require": {
+        "symfony/console": "^4.4@dev"
+    }
 }
