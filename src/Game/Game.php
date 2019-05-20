@@ -27,7 +27,7 @@ class Game {
                  return $this->hive->hitBee();
                 break;
             default:
-                throw new \Exception('Command not supported');
+                throw new \UnexpectedValueException('Command not supported');
         }
     }
 

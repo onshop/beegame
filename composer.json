@@ -4,8 +4,12 @@
     "type": "composer",
     "autoload": {
         "psr-4": {
-            "Game\\": "src/Game",
-            "Game\\Bee\\": "src/Game/Game"
+            "Game\\": "src/Game"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\Game\\": "tests/"
         }
     },
     "license": "MIT",
@@ -18,5 +22,8 @@
     "minimum-stability": "dev",
     "require": {
         "symfony/console": "^4.4@dev"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^8"
     }
 }

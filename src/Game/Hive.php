@@ -7,52 +7,72 @@ use Game\Bee\Drone;
 use Game\Bee\Worker;
 use Game\Bee\Queen;
 
+/**
+ * Class Hive
+ * @package Game
+ */
 class Hive
 {
     private $beeCollection = [];
 
     private $beeIndex;
 
-    public function add($beeType, $quantity)
+    static $outputMsg = "You hit a %s bee. Current hive lifespan of %s has been reduced by %d to %d. The remaining hive lifespan is %d.";
+
+    public function add($beeType, $quantity): Hive
     {
+        if ($quantity < 1) {
+            throw new \InvalidArgumentException('Bee total is not an integer');
+        }
+
         foreach (range(1, $quantity) as $i) {
 
             switch (strtolower($beeType)) {
-                case 'drone':
+                case "drone":
                     $bee = new Drone();
                     break;
-                case 'worker':
+                case "worker":
                     $bee = new Worker();
                     break;
-                case 'queen':
+                case "queen":
                     $bee = new Queen();
                     break;
                 default:
-                    throw new \Exception($beeType . ' is not known');
+                    throw new \UnexpectedValueException("$beeType is not known");
             }
 
             $this->beeCollection[] = $bee;
         }
+
+        return $this;
+    }
+
+    /**
+     * @return array
+     */
+    public function getBeeCollection(): array
+    {
+        return $this->beeCollection;
     }
 
     /**
      * @return int
      */
-    public function getBeesRemaining()
+    public function getTotalBeesRemaining(): int
     {
         return count($this->beeCollection);
     }
 
     /**
-     * @return int|mixed
+     * @return int
      */
-    public function getRemainingLifeSpan()
+    public function getRemainingLifeSpan(): int
     {
         $remainingLifeSpan = 0;
+
         /** @var AbstractBee $bee */
-        foreach ($this->beeCollection as $index => $bee){
+        foreach ($this->beeCollection as $index => $bee) {
             $remainingLifeSpan += $bee->getLifeSpan();
-            //echo $index . " " . $remainingLifeSpan . " " . $bee->getLifeSpan() . "\n";
         }
 
         return $remainingLifeSpan;
@@ -61,43 +81,55 @@ class Hive
     /**
      * @return bool
      */
-    public function isHiveDead()
+    public function isHiveDead(): bool
     {
-        return $this->getBeesRemaining() < 1;
+        return $this->getTotalBeesRemaining() < 1;
     }
 
     /**
-     *
+     * @param null $index
+     * @return string
      */
-    public function hitBee()
+    public function hitBee($index = null): string
     {
-        $bee = $this->selectRandomBee();
+        $bee = $this->selectBee($index);
 
         $currentBeeLife = $bee->getLifeSpan();
 
         $bee->hit();
 
-        if($bee->isDead()){
-
-
+        if ($bee->isDead()) {
             unset($this->beeCollection[$this->beeIndex]);
 
-            if($bee instanceof Queen){
+            if ($bee instanceof Queen) {
                 $this->beeCollection = [];
             }
         }
 
-        return "You hit a " . $bee->getType() . " bee. Current hive lifespan of $currentBeeLife has been reduced by " . $bee->getHitDeduction() . " to " . $bee->getLifeSpan() . ". The remaining hive lifespan is " . $this->getRemainingLifeSpan();
+        return sprintf($this::$outputMsg, $bee->getType(), $currentBeeLife, $bee->getHitDeduction(), $bee->getLifeSpan(), $this->getRemainingLifeSpan());
     }
 
     /**
+     * @param null $index
      * @return AbstractBee
      */
-    public function selectRandomBee()
+    public function selectBee($index = null): AbstractBee
     {
-        $this->beeIndex = array_rand($this->beeCollection, 1);
+        if (is_null($index)) {
+            $index = array_rand($this->beeCollection, 1);
+        }
 
-        return $this->beeCollection[$this->beeIndex];
+        $this->beeIndex = $index;
+
+        return $this->beeCollection[$index];
+    }
+
+    /**
+     * @return int
+     */
+    public function getBeeCurrentIndex(): int
+    {
+        return $this->beeIndex;
     }
 
 

@@ -26,12 +26,30 @@ abstract class AbstractBee{
         return $this->lifeSpan;
     }
 
+    public function setLifeSpan($lifeSpan): AbstractBee
+    {
+        $this->lifeSpan = $lifeSpan;
+
+        return $this;
+    }
+
     /**
      * @return int
      */
     public function getHitDeduction(): int
     {
         return $this->hitDeduction;
+    }
+
+    /**
+     * @param $hitDeduction
+     * @return AbstractBee
+     */
+    public function setHitDeduction($hitDeduction): AbstractBee
+    {
+        $this->hitDeduction = $hitDeduction;
+
+        return $this;
     }
 
     /**

@@ -6,9 +6,6 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\Question;
 
-putenv('APP_ENV=dev');
-putenv('APP_DEBUG=1');
-
 class PlayCommand extends Command
 {
     /**
@@ -17,8 +14,8 @@ class PlayCommand extends Command
     protected function configure()
     {
         $this->setName("play:game")
-            ->setDescription("Plays the Bee Game.")
-            ->setHelp("You may enter the following commands in the console: hit");
+             ->setDescription("Plays the Bee Game.")
+             ->setHelp("You may enter the following commands in the console: hit");
     }
 
     /**
